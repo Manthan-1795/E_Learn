@@ -1,0 +1,274 @@
+/* ========== PROFILE DROPDOWN STYLING (React Component) ========== */
+
+/* Main Container */
+.relative {
+  position: relative;
+  display: inline-block;
+}
+
+/* Avatar Button Styling */
+.relative .btn-link {
+  text-decoration: none;
+  border: none;
+  background: none;
+  transition: all 0.3s ease;
+}
+
+.relative .btn-link:hover {
+  transform: scale(1.05);
+}
+
+.relative .btn-link .rounded-circle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  border: 2px solid #e0e7ff;
+}
+
+.relative .btn-link:hover .rounded-circle {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  transform: rotate(5deg);
+  border-color: #667eea;
+}
+
+/* Dropdown Menu */
+.relative .dropdown-menu {
+  border-radius: 16px !important;
+  box-shadow: 
+    0 0 0 1px rgba(99, 102, 241, 0.1),
+    0 20px 60px rgba(99, 102, 241, 0.25),
+    0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  padding: 0 !important;
+  z-index: 1050;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Profile Header Section */
+.dropdown-menu > div:first-child {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-menu > div:first-child::before {
+  display: none !important;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.5; 
+  }
+  50% { 
+    transform: scale(1.1); 
+    opacity: 0.8; 
+  }
+}
+
+.dropdown-menu > div:first-child .d-flex {
+  position: relative;
+  z-index: 1;
+}
+
+.dropdown-menu > div:first-child .rounded-circle {
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu > div:first-child h3 {
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.125rem;
+}
+
+.dropdown-menu > div:first-child p {
+  margin: 0.25rem 0 0;
+  opacity: 0.95;
+  font-size: 0.875rem;
+}
+
+.dropdown-menu > div:first-child p.text-xs {
+  opacity: 0.85;
+  font-size: 0.75rem;
+}
+
+/* Menu Items Section */
+.dropdown-menu > div:nth-child(2) {
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+}
+
+/* Button Styles */
+.dropdown-menu .btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+/* Left Border Animation */
+.dropdown-menu .btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(to bottom, #667eea, #764ba2);
+  transform: translateX(-3px);
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu .btn:hover::before {
+  transform: translateX(0);
+}
+
+/* Change Password Button */
+.dropdown-menu .btn-outline-primary {
+  background: white;
+  border-color: #e5e7eb !important;
+}
+
+.dropdown-menu .btn-outline-primary:hover {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%) !important;
+  border-color: #667eea !important;
+  color: #667eea !important;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.dropdown-menu .btn-outline-primary:hover svg {
+  color: #764ba2 !important;
+  transform: scale(1.2);
+}
+
+/* Purchases Button */
+.dropdown-menu .btn-outline-success {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #bbf7d0 !important;
+}
+
+.dropdown-menu .btn-outline-success::before {
+  background: linear-gradient(to bottom, #10b981, #059669);
+}
+
+.dropdown-menu .btn-outline-success:hover {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+  border-color: #16a34a !important;
+  color: #16a34a !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.dropdown-menu .btn-outline-success:hover svg {
+  color: #15803d !important;
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4));
+  transform: scale(1.2);
+}
+
+/* Logout Button */
+.dropdown-menu .btn-outline-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #fecaca !important;
+}
+
+.dropdown-menu .btn-outline-danger::before {
+  background: linear-gradient(to bottom, #dc2626, #b91c1c);
+}
+
+.dropdown-menu .btn-outline-danger:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  border-color: #dc2626 !important;
+  color: #b91c1c !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.dropdown-menu .btn-outline-danger:hover svg {
+  color: #dc2626 !important;
+  filter: drop-shadow(0 0 6px rgba(220, 38, 38, 0.4));
+  transform: scale(1.2);
+}
+
+/* Icon Animation */
+.dropdown-menu .btn svg {
+  transition: all 0.3s ease;
+}
+
+/* ChevronRight Arrow Animation */
+.dropdown-menu .btn:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+/* Divider */
+.dropdown-menu .border-top {
+  border-color: rgba(229, 231, 235, 0.5) !important;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .relative .dropdown-menu {
+    width: 17.5rem !important;
+  }
+  
+ .dropdown-menu > div:first-child {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+  .dropdown-menu > div:first-child .rounded-circle {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+  }
+  
+  .dropdown-menu > div:first-child h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .relative .dropdown-menu {
+    width: 16.25rem !important;
+  }
+  
+  .relative .btn-link .rounded-circle {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+  
+  .dropdown-menu > div:first-child .rounded-circle {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  .dropdown-menu > div:first-child h3 {
+    font-size: 0.9375rem;
+  }
+  
+  .dropdown-menu > div:first-child p {
+    font-size: 0.8125rem;
+  }
+  
+  .dropdown-menu .btn {
+    padding: 0.625rem !important;
+    font-size: 0.875rem;
+  }
+}
+
+.dropdown-menu .btn::before {
+  content: none !important;
+}

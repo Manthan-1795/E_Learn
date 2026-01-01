@@ -1,0 +1,39 @@
+CREATE TABLE users (
+    email VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(100),
+    role enum('student','admin') DEFAULT 'student'
+);
+
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY AUTO_INCREMENT,
+    course_name VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    fees INT,
+    start_date DATE,
+    end_date DATE,
+    video_expire_days INT
+);
+
+CREATE TABLE students (
+    reg_no INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20),
+    email VARCHAR(50),
+    course_id INT,
+    mobile_no CHAR(10),
+    profile_pic BLOB,
+    CONSTRAINT fk_student_course
+        FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    CONSTRAINT fk_student_users
+        FOREIGN KEY (email) REFERENCES users(email)
+);
+
+CREATE TABLE videos (
+    video_id INT PRIMARY KEY AUTO_INCREMENT,
+    course_id INT NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    youtube_url VARCHAR(255),
+    added_at DATE,
+    CONSTRAINT fk_video_course
+        FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);

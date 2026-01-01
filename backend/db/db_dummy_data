@@ -1,0 +1,67 @@
+-- ===================================
+-- Users Table Inserts
+-- ===================================
+INSERT INTO users (email, password, role) VALUES
+('admin@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin'),
+('akshad@gmail.com', '2101a2ea959af5f866ab6a66faab29a69d72eb2011b09cba2b14ecb566dc0b10', 'student'),
+('jaadu@gmail.com', '264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb', 'student'),
+('manthan@gmail.com', '4c3b3284e206c3db72440736cfdbd185f0e61a3c7fd9f049987196b987d3d1ee', 'student'),
+('rushi@gmail.com', 'f04125358169beafeee8fd8b978ad4359e67a92086befd992b60ee9dd0a2c54d', 'student'),
+('tejas@gmain.com', '264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb', 'student'),
+('wajid@gmail.com', '9d709a05ea3ef8e47d527b1ad766e60447b90f0cb58c3b5ba9a77c30e53b0f4c', 'student');
+
+-- ===================================
+-- Courses Table Inserts
+-- ===================================
+INSERT INTO courses (course_name, description, fees, start_date, end_date, video_expire_days) VALUES
+('Java Full Stack Development', 'Core Java, JDBC, Spring Boot, Hibernate, React, MySQL', 25000, '2025-01-01', '2025-12-31', 180),
+('Web Development', 'HTML, CSS, JavaScript, Bootstrap, MySQL', 15000, '2025-02-01', '2025-11-30', 150),
+('Python Programming', 'Core Python, OOP, File Handling, Modules, MySQL', 18000, '2025-03-01', '2025-12-31', 180),
+('Backend Development', 'Node.js, Express.js, REST APIs, MySQL', 20000, '2025-12-25', '2026-06-25', 180),
+('Java Full Stack Development', 'Core Java, JDBC, Spring Boot, React, MySQL', 28000, '2025-12-20', '2026-07-20', 180),
+('Frontend Development', 'HTML, CSS, JavaScript, React', 18000, '2025-12-22', '2026-06-22', 150),
+('Python Full Stack', 'Python, Django, REST APIs, PostgreSQL', 26000, '2025-12-28', '2026-07-28', 180),
+('Data Structures & Algorithms', 'DSA with Java, Problem Solving', 22000, '2025-12-26', '2026-05-26', 120),
+('MERN Stack', 'Learn full MERN stack in one shot', 1997, '2025-12-30', '2026-01-17', 20);
+
+-- ===================================
+-- Students Table Inserts
+-- ===================================
+INSERT INTO students (name, email, course_id, mobile_no, profile_pic) VALUES
+('Akshad', 'akshad@gmail.com', 4, '9876543210', NULL),
+('Manthan', 'manthan@gmail.com', 4, '9876543211', NULL),
+('Rushi', 'rushi@gmail.com', 4, '9876543212', NULL),
+('Wajid Latkar', 'wajid@gmail.com', 7, '1234567890', NULL),
+('wajid latkar', 'wajid@gmail.com', 8, '9403043423', NULL),
+('tej kharat', 'tejas@gmain.com', 6, '0444444444', NULL),
+('Jaadu', 'jaadu@gmail.com', 9, '1234567890', NULL);
+
+-- ===================================
+-- Videos Table Inserts
+-- ===================================
+INSERT INTO videos (course_id, title, description, youtube_url, added_at) VALUES
+(4, 'Node.js Full Course', 'Complete Node.js tutorial for beginners', 'https://www.youtube.com/watch?v=RLtyhwFtXQA', '2025-12-25'),
+(4, 'Express.js Crash Course', 'Learn Express.js from scratch', 'https://www.youtube.com/watch?v=L72fhGm1tfE', '2025-12-26'),
+(4, 'REST API Tutorial', 'Build REST APIs using Node & Express', 'https://www.youtube.com/watch?v=pKd0Rpw7O48', '2025-12-27'),
+(4, 'MySQL with Node.js', 'Connect Node.js with MySQL database', 'https://www.youtube.com/watch?v=EN6Dx22cPRI', '2025-12-28'),
+(5, 'Core Java Full Course', 'Complete Core Java for beginners', 'https://www.youtube.com/watch?v=BGTx91t8q50', '2025-12-26'),
+(5, 'Spring Boot Tutorial', 'Spring Boot REST API development', 'https://www.youtube.com/watch?v=9SGDpanrc8U', '2025-12-27'),
+(5, 'React JS Full Course', 'Complete React JS tutorial', 'https://www.youtube.com/watch?v=bMknfKXIFA8', '2025-12-28'),
+(6, 'HTML & CSS Full Course', 'HTML and CSS complete tutorial', 'https://www.youtube.com/watch?v=G3e-cpL7ofc', '2025-12-26'),
+(6, 'JavaScript Full Course', 'JavaScript from basics to advanced', 'https://www.youtube.com/watch?v=PkZNo7MFNFg', '2025-12-27'),
+(6, 'React Crash Course', 'React JS beginner to advanced', 'https://www.youtube.com/watch?v=w7ejDZ8SWv8', '2025-12-28'),
+(7, 'Python Full Course', 'Python programming complete course', 'https://www.youtube.com/watch?v=rfscVS0vtbw', '2025-12-29'),
+(7, 'Django Tutorial', 'Django web framework full tutorial', 'https://www.youtube.com/watch?v=F5mRW0jo-U4', '2025-12-30'),
+(7, 'Django REST Framework', 'Build REST APIs using DRF', 'https://www.youtube.com/watch?v=c708Nf0cHrs', '2025-12-31'),
+(8, 'DSA with Java', 'Complete Data Structures & Algorithms', 'https://www.youtube.com/watch?v=WV6-7P5b7XQ', '2025-12-26'),
+(8, 'Array & Linked List', 'DSA basics explained', 'https://www.youtube.com/watch?v=RBSGKlAvoiM', '2025-12-27'),
+(1, 'Advanced Java Concepts', 'Collections, Multithreading, JVM', 'https://www.youtube.com/watch?v=GrVj3kq8RLY', '2025-01-15'),
+(1, 'JDBC Complete Tutorial', 'Database connectivity using JDBC', 'https://www.youtube.com/watch?v=BCqW5X9j6M4', '2025-01-20'),
+(1, 'Spring Security Basics', 'Authentication & Authorization', 'https://www.youtube.com/watch?v=her_7pa0vrg', '2025-02-10'),
+(2, 'Bootstrap 5 Tutorial', 'Responsive design using Bootstrap', 'https://www.youtube.com/watch?v=Jyvffr3aCp0', '2025-02-15'),
+(2, 'JavaScript DOM Manipulation', 'Dynamic web pages using JS', 'https://www.youtube.com/watch?v=5fb2aPlgoys', '2025-02-18'),
+(2, 'MySQL for Web Developers', 'Database integration with websites', 'https://www.youtube.com/watch?v=7S_tz1z_5bA', '2025-02-22'),
+(3, 'Python Functions & Modules', 'Reusable code and modular programming', 'https://www.youtube.com/watch?v=9Os0o3wzS_I', '2025-03-05'),
+(3, 'Python File Handling', 'Read/write files in Python', 'https://www.youtube.com/watch?v=Uh2ebFW8OYM', '2025-03-08'),
+(3, 'Python Exception Handling', 'Error handling and debugging', 'https://www.youtube.com/watch?v=NIWwJbo-9_8', '2025-03-12'),
+(9, 'MERN Stack oneshot', 'This is a video for MERN Stack beginners', 'https://www.youtube.com/watch?v=CvCiNeLnZ00', '2025-12-30');
