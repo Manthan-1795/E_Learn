@@ -102,6 +102,12 @@ export default function Navbar() {
                 >
                   About Us
                 </Link>
+                <Link
+                  to="/admin-credentials"
+                  className={`nav-link nav-link--admin-demo${isActive("/admin-credentials") ? " nav-link--active" : ""}`}
+                >
+                  <span className="nav-admin-badge">Admin Demo</span>
+                </Link>
               </>
             )}
           </div>
@@ -262,6 +268,12 @@ export default function Navbar() {
             )}
             <MobileItem to="/aboutus" onClick={() => setMobileOpen(false)}>
               About Us
+            </MobileItem>
+            <MobileItem
+              to="/admin-credentials"
+              onClick={() => setMobileOpen(false)}
+            >
+              🛡️ Admin Demo
             </MobileItem>
           </>
         )}

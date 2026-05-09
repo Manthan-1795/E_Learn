@@ -21,6 +21,7 @@ import MyCourses from "./pages/MyCourses";
 import MyCourseVideos from "./pages/MyCourseVideos";
 import AddVideoForm from "./pages/AddVideoForm";
 import AboutUs from "./pages/AboutUs";
+import AdminCredentials from "./pages/AdminCredentials";
 
 import ProfileDropdown from "./components/ProfileDropdown";
 import ChangePassword from "./components/ChangePassword";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/admin-credentials" element={<AdminCredentials />} />
           <Route path="/home" element={<Home />} />
           <Route path="/courses" element={<Courses />} />
 
