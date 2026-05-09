@@ -24,7 +24,6 @@ function CourseRegister() {
     }
   }, [state, navigate]);
 
-  // Sync if user/profile loads after mount
   useEffect(() => {
     setEmail(user?.email || "");
     setName(profile?.user?.name || "");
@@ -68,7 +67,9 @@ function CourseRegister() {
 
       if (result.status === "success") {
         toast.success(
-          "Course registered successfully! Login with password: student",
+          user
+            ? "Course registered successfully!"
+            : "Course registered successfully! Login with password: student",
         );
         navigate("/my-courses");
       } else if (result.error) {
