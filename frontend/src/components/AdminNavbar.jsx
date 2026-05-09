@@ -1,13 +1,19 @@
-// src/components/AdminNavbar.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contex/AuthContext";
 import "./Navbar.css";
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const goTo = (path) => {
     navigate(path);
+  };
+
+  const handleLogout = () => {
+    logout(); // clears sessionStorage + user state
+    navigate("/login");
   };
 
   return (
@@ -117,7 +123,7 @@ export default function AdminNavbar() {
           {/* Logout Button */}
           <button
             className="btn ud-auth-btn--primary d-none d-md-inline-block"
-            onClick={() => goTo("/login")}
+            onClick={handleLogout}
           >
             Log Out
           </button>
