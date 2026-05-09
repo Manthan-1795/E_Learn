@@ -5,69 +5,60 @@ const cryptojs = require("crypto-js");
 
 const router = express.Router();
 
-router.post("/register-to-course", (req, res) => {
+// Promisify pool.query
+const query = (sql, params) =>
+  new Promise((resolve, reject) => {
+    pool.query(sql, params, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+
+router.post("/register-to-course", async (req, res) => {
   const { name, email, course_id, mobile_no } = req.body;
 
   if (!name || !email || !course_id || !mobile_no) {
     return res.send({ status: "error", message: "All fields are required" });
   }
 
-  // Step 1: Check already registered for this course
-  pool.query(
-    "SELECT * FROM students WHERE email = ? AND course_id = ?",
-    [email, course_id],
-    (err, rows) => {
-      if (err) return res.send({ status: "error", error: err });
+  try {
+    // Step 1: Check already registered for this course
+    const existingStudents = await query(
+      "SELECT * FROM students WHERE email = ? AND course_id = ?",
+      [email, course_id],
+    );
 
-      if (rows.length > 0) {
-        return res.send({
-          status: "exists",
-          message: "Already registered for this course",
-        });
-      }
+    if (existingStudents.length > 0) {
+      return res.send({
+        status: "exists",
+        message: "Already registered for this course",
+      });
+    }
 
-      // Step 2: Check if user account exists
-      pool.query(
-        "SELECT * FROM users WHERE email = ?",
-        [email],
-        (err, users) => {
-          if (err) return res.send({ status: "error", error: err });
+    // Step 2: Check if user account exists
+    const existingUsers = await query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
 
-          if (users.length === 0) {
-            // New user — create account FIRST, then register student inside callback
-            const hashedPassword = cryptojs.SHA256("student").toString();
-            pool.query(
-              "INSERT INTO users(email, password) VALUES (?, ?)",
-              [email, hashedPassword],
-              (err) => {
-                if (err) return res.send({ status: "error", error: err });
+    if (existingUsers.length === 0) {
+      // Await ensures INSERT is fully committed before next query runs
+      const hashedPassword = cryptojs.SHA256("student").toString();
+      await query("INSERT INTO users(email, password) VALUES (?, ?)", [
+        email,
+        hashedPassword,
+      ]);
+    }
 
-                // User saved — now insert student
-                pool.query(
-                  "INSERT INTO students(name, email, course_id, mobile_no) VALUES(?, ?, ?, ?)",
-                  [name, email, course_id, mobile_no],
-                  (err, data) => {
-                    if (err) return res.send({ status: "error", error: err });
-                    return res.send({ status: "success", data });
-                  },
-                );
-              },
-            );
-          } else {
-            // Existing user — just register student
-            pool.query(
-              "INSERT INTO students(name, email, course_id, mobile_no) VALUES(?, ?, ?, ?)",
-              [name, email, course_id, mobile_no],
-              (err, data) => {
-                if (err) return res.send({ status: "error", error: err });
-                return res.send({ status: "success", data });
-              },
-            );
-          }
-        },
-      );
-    },
-  );
+    // Step 3: User row is guaranteed to exist — safe to insert student
+    const data = await query(
+      "INSERT INTO students(name, email, course_id, mobile_no) VALUES(?, ?, ?, ?)",
+      [name, email, course_id, mobile_no],
+    );
+
+    return res.send({ status: "success", data });
+  } catch (err) {
+    return res.send({ status: "error", error: err });
+  }
 });
 
 router.put("/change-password", (req, res) => {
