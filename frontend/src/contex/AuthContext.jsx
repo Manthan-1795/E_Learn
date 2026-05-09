@@ -1,6 +1,6 @@
-// src/context/AuthContext.jsx (complete updated code)
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { loginUser, getProfile } from '../services/userService'; // 🆕 Import
+// src/context/AuthContext.jsx
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { loginUser, getProfile } from "../services/userService";
 
 const AuthContext = createContext();
 
@@ -8,7 +8,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);  // 🆕 Profile data
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,22 +16,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({ 
-          email: payload.email, 
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUser({
+          email: payload.email,
           role: payload.role,
-          token 
+          token,
         });
-        
+
         const profileData = await getProfile(token);
         if (profileData.status === "Success") {
           setProfile(profileData.data);
         }
       } catch (error) {
-        sessionStorage.removeItem('token');
+        // Invalid token — wipe everything
+        sessionStorage.clear();
       }
     }
     setLoading(false);
@@ -40,32 +41,39 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await loginUser(email, password);
-      
+
       if (response.status === "Success") {
         const { token } = response.data;
-        sessionStorage.setItem('token', token);
-        
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({ 
-          email: payload.email, 
+
+        // Clear any stale data first, then set fresh values
+        sessionStorage.clear();
+        sessionStorage.setItem("token", token);
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        sessionStorage.setItem("email", payload.email);
+
+        setUser({
+          email: payload.email,
           role: payload.role,
-          token 
+          token,
         });
-        
-        // Profile bhi fetch kar le
+
         const profileData = await getProfile(token);
-        setProfile(profileData.data);
-        
+        if (profileData.status === "Success") {
+          setProfile(profileData.data);
+        }
+
         return { success: true };
       }
       return { success: false, error: response.error };
     } catch (error) {
-      return { success: false, error: 'Login failed' };
+      return { success: false, error: "Login failed" };
     }
   };
 
   const logout = () => {
-    sessionStorage.removeItem('token');
+    // Clear EVERYTHING from sessionStorage — no stale email/token left behind
+    sessionStorage.clear();
     setUser(null);
     setProfile(null);
   };

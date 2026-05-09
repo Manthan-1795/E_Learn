@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LoginContext } from "./../App";
 import { useAuth } from "../contex/AuthContext";
@@ -26,14 +26,12 @@ function Login() {
     const result = await authLogin(email, password);
 
     if (result.success) {
-      // Get token from sessionStorage (already saved by authLogin)
       const token = sessionStorage.getItem("token");
       if (!token) {
         toast.error("Login failed: no token returned");
         return;
       }
 
-      // Decode token to get email and role
       const payload = JSON.parse(atob(token.split(".")[1]));
       sessionStorage.setItem("email", payload.email);
 
@@ -77,6 +75,7 @@ function Login() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleLogin()}
             />
           </div>
 
@@ -88,12 +87,27 @@ function Login() {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleLogin()}
             />
           </div>
 
           <button className="login-button" type="button" onClick={handleLogin}>
             Sign In
           </button>
+
+          {/* Default password hint */}
+          <div className="login-hint">
+            <span className="login-hint-icon">💡</span>
+            Default password is&nbsp;<strong>student</strong>
+          </div>
+
+          {/* Home page link */}
+          <div className="login-footer">
+            Just browsing?&nbsp;
+            <Link to="/home" className="login-link">
+              Go to Home
+            </Link>
+          </div>
         </div>
       </div>
     </div>

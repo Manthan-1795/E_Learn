@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { registerCourseService } from "../services/courseService";
+import { useAuth } from "../contex/AuthContext";
 import { toast } from "react-toastify";
 
 function CourseRegister() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth(); // ← read from context, not sessionStorage
 
-  const loggedEmail = sessionStorage.getItem("email");
+  // Use logged-in user's email if available, otherwise empty
+  const loggedEmail = user?.email || "";
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(loggedEmail || "");
+  const [email, setEmail] = useState(loggedEmail);
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -21,11 +24,10 @@ function CourseRegister() {
     }
   }, [state, navigate]);
 
+  // Keep email in sync if user logs in/out mid-session
   useEffect(() => {
-    if (loggedEmail) {
-      setEmail(loggedEmail);
-    }
-  }, [loggedEmail]);
+    setEmail(user?.email || "");
+  }, [user]);
 
   const registerCourse = async () => {
     if (!name || !email || !mobile) {
@@ -99,8 +101,6 @@ function CourseRegister() {
               value={name}
               onChange={(e) => {
                 const value = e.target.value;
-
-                // Allow only letters and spaces
                 if (/^[A-Za-z\s]*$/.test(value)) {
                   setName(value);
                 }
@@ -113,6 +113,7 @@ function CourseRegister() {
               type="email"
               value={email}
               onChange={(e) => {
+                // Only allow editing if no logged-in user
                 if (!loggedEmail) {
                   setEmail(e.target.value);
                 }
