@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LoginContext } from "./../App";
@@ -9,9 +9,18 @@ import heroImg from "../assets/hero-Img.png";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { setLoginStatus } = useContext(LoginContext);
-  const { login: authLogin } = useAuth();
+  const { login: authLogin, user } = useAuth();
+
+  // If already logged in, redirect to correct page
+  useEffect(() => {
+    if (user) {
+      if (user.role === "admin") navigate("/admin");
+      else navigate("/home");
+    }
+  }, [user, navigate]);
 
   const handleLogin = async () => {
     if (!email) {
@@ -23,7 +32,9 @@ function Login() {
       return;
     }
 
+    setIsLoading(true);
     const result = await authLogin(email, password);
+    setIsLoading(false);
 
     if (result.success) {
       const token = sessionStorage.getItem("token");
@@ -34,7 +45,6 @@ function Login() {
 
       const payload = JSON.parse(atob(token.split(".")[1]));
       sessionStorage.setItem("email", payload.email);
-
       setLoginStatus(true);
       toast.success("Login successful");
 
@@ -44,13 +54,12 @@ function Login() {
         navigate("/home");
       }
     } else {
-      toast.error(result.error || "Login failed");
+      toast.error(result.error || "Invalid email or password");
     }
   };
 
   return (
     <div className="login-container">
-      {/* Left illustration */}
       <div className="login-illustration">
         <img src={heroImg} alt="Online learning" className="login-image" />
         <h1 className="login-brand">E‑Learn Hub</h1>
@@ -59,7 +68,6 @@ function Login() {
         </p>
       </div>
 
-      {/* Right form */}
       <div className="login-form-wrapper">
         <div className="login-card">
           <h2 className="login-heading">Log in to your account</h2>
@@ -76,6 +84,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+              disabled={isLoading}
             />
           </div>
 
@@ -88,24 +97,35 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+              disabled={isLoading}
             />
           </div>
 
-          <button className="login-button" type="button" onClick={handleLogin}>
-            Sign In
+          <button
+            className="login-button"
+            type="button"
+            onClick={handleLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
           </button>
 
-          {/* Default password hint */}
           <div className="login-hint">
             <span className="login-hint-icon">💡</span>
-            Default password is&nbsp;<strong>student</strong>
+            New student default password:&nbsp;<strong>student</strong>
           </div>
 
-          {/* Home page link */}
           <div className="login-footer">
             Just browsing?&nbsp;
-            <Link to="/home" className="login-link">
-              Go to Home
+            <Link
+              to={user?.role === "admin" ? "/admin" : "/home"}
+              className="login-link"
+            >
+              {user
+                ? user.role === "admin"
+                  ? "Go to Admin Panel"
+                  : "Go to Home"
+                : "Go to Home"}
             </Link>
           </div>
         </div>

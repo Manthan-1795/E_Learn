@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 function CourseRegister() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth(); // ← read from context, not sessionStorage
+  const { user, profile } = useAuth();
 
-  // Use logged-in user's email if available, otherwise empty
   const loggedEmail = user?.email || "";
+  const loggedName = profile?.user?.name || "";
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(loggedName);
   const [email, setEmail] = useState(loggedEmail);
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,14 +24,23 @@ function CourseRegister() {
     }
   }, [state, navigate]);
 
-  // Keep email in sync if user logs in/out mid-session
+  // Sync if user/profile loads after mount
   useEffect(() => {
     setEmail(user?.email || "");
-  }, [user]);
+    setName(profile?.user?.name || "");
+  }, [user, profile]);
 
   const registerCourse = async () => {
-    if (!name || !email || !mobile) {
-      toast.warn("Please fill all fields");
+    if (!name.trim()) {
+      toast.warn("Please enter your name");
+      return;
+    }
+    if (!email) {
+      toast.warn("Please enter your email");
+      return;
+    }
+    if (!mobile) {
+      toast.warn("Please enter your mobile number");
       return;
     }
 
@@ -52,19 +61,23 @@ function CourseRegister() {
       });
 
       if (result.status === "exists") {
-        toast.warn("User already registered for this course");
+        toast.warn("You are already registered for this course");
         setLoading(false);
         return;
       }
 
-      if (result.status === "success" || result.data?.affectedRows === 1) {
-        toast.success("Course registered successfully");
+      if (result.status === "success") {
+        toast.success(
+          "Course registered successfully! Login with password: student",
+        );
         navigate("/my-courses");
+      } else if (result.error) {
+        toast.error("Registration failed: " + JSON.stringify(result.error));
       } else {
-        toast.error("Registration failed");
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.log("REGISTER ERROR:", error);
+      console.error("REGISTER ERROR:", error);
       toast.error("Something went wrong");
     }
 
@@ -95,6 +108,13 @@ function CourseRegister() {
           <div className="card p-4 shadow">
             <h3 className="text-center mb-4">Register to Course</h3>
 
+            {!user && (
+              <div className="alert alert-info mb-3">
+                <strong>Note:</strong> A login account will be created
+                automatically with default password: <strong>student</strong>
+              </div>
+            )}
+
             <input
               className="form-control mb-3"
               placeholder="Full Name"
@@ -105,6 +125,7 @@ function CourseRegister() {
                   setName(value);
                 }
               }}
+              disabled={loading}
             />
 
             <input
@@ -113,12 +134,11 @@ function CourseRegister() {
               type="email"
               value={email}
               onChange={(e) => {
-                // Only allow editing if no logged-in user
                 if (!loggedEmail) {
                   setEmail(e.target.value);
                 }
               }}
-              disabled={!!loggedEmail}
+              disabled={!!loggedEmail || loading}
             />
 
             <input
@@ -128,6 +148,7 @@ function CourseRegister() {
               maxLength={10}
               value={mobile}
               onChange={(e) => setMobile(e.target.value.replace(/\D/g, ""))}
+              disabled={loading}
             />
 
             <button

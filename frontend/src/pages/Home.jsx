@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getCourses } from "../services/userService";
+import { useAuth } from "../contex/AuthContext";
 import "./Home.css";
 
 const STATS = [
@@ -80,7 +81,15 @@ function StarRating({ count }) {
 
 function Home() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [courses, setCourses] = useState([]);
+
+  // Redirect admin away from student home page
+  useEffect(() => {
+    if (user?.role === "admin") {
+      navigate("/admin");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     getCourses()
