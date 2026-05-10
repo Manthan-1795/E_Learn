@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getCourses } from "../services/userService";
-import { useAuth } from "../contex/AuthContext";
 import "./Home.css";
 
+// ── Copy the same STATS / FEATURES / TESTIMONIALS constants from your original ──
 const STATS = [
   { value: "12,000+", label: "Students Enrolled" },
   { value: "80+", label: "Expert Courses" },
@@ -81,15 +81,10 @@ function StarRating({ count }) {
 
 function Home() {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [courses, setCourses] = useState([]);
 
-  // Redirect admin away from student home page
-  useEffect(() => {
-    if (user?.role === "admin") {
-      navigate("/admin");
-    }
-  }, [user, navigate]);
+  // ✅ REMOVED: the admin redirect that caused the infinite loop.
+  //    Route guards in App.jsx now handle all redirection.
 
   useEffect(() => {
     getCourses()

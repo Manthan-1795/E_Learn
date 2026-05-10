@@ -12,15 +12,15 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { setLoginStatus } = useContext(LoginContext);
-  const { login: authLogin, user } = useAuth();
+  const { login: authLogin, user, loading } = useAuth();
 
-  // If already logged in, redirect to correct page
+  // ✅ If already logged in and auth is resolved, redirect immediately
   useEffect(() => {
-    if (user) {
-      if (user.role === "admin") navigate("/admin");
-      else navigate("/home");
+    if (!loading && user) {
+      if (user.role === "admin") navigate("/admin", { replace: true });
+      else navigate("/home", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleLogin = async () => {
     if (!email) {
@@ -37,26 +37,26 @@ function Login() {
     setIsLoading(false);
 
     if (result.success) {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        toast.error("Login failed: no token returned");
-        return;
-      }
-
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      sessionStorage.setItem("email", payload.email);
+      // Sync legacy LoginContext so any old components still work
       setLoginStatus(true);
       toast.success("Login successful");
 
+      // ✅ Read role from the token we just stored (authLogin already decoded it)
+      const token = sessionStorage.getItem("token");
+      const payload = JSON.parse(atob(token.split(".")[1]));
+
       if (payload.role === "admin") {
-        navigate("/admin");
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }
     } else {
       toast.error(result.error || "Invalid email or password");
     }
   };
+
+  // Don't render the form while still checking auth
+  if (loading) return null;
 
   return (
     <div className="login-container">
@@ -117,15 +117,8 @@ function Login() {
 
           <div className="login-footer">
             Just browsing?&nbsp;
-            <Link
-              to={user?.role === "admin" ? "/admin" : "/home"}
-              className="login-link"
-            >
-              {user
-                ? user.role === "admin"
-                  ? "Go to Admin Panel"
-                  : "Go to Home"
-                : "Go to Home"}
+            <Link to="/home" className="login-link">
+              Go to Home
             </Link>
           </div>
         </div>
